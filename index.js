@@ -48,7 +48,7 @@ const sanitizeFilename = (phoneNumber) => {
 /**
  * Generate QR Code API
  */
-const SERVER_URL = "https://qrcodegen-y23f.onrender.com";
+const SERVER_URL = "https://qrcodegen-1-3su1.onrender.com";
 
 app.post("/generate-qr", async (req, res) => {
   const { phoneNumbers } = req.body;
@@ -60,7 +60,7 @@ app.post("/generate-qr", async (req, res) => {
   }
 
   try {
-    const filePaths = [];
+    const qrImages = [];
 
     for (const number of phoneNumbers) {
       const sanitizedNumber = sanitizeFilename(number);
@@ -70,14 +70,15 @@ app.post("/generate-qr", async (req, res) => {
 
       // Generate QR Code with a scan URL
       const scanUrl = `${SERVER_URL}/scan-qr?code=${sanitizedNumber}`;
-      const qrPath = path.join(qrCodesDir, `${sanitizedNumber}.png`);
 
-      await QRCode.toFile(qrPath, scanUrl);
-      filePaths.push({ phone: number, qrPath, scanUrl });
+      // Generate QR code as a data URL (base64 PNG)
+      const qrImage = await QRCode.toDataURL(scanUrl);
+
+      qrImages.push({ phone: number, qrCode: qrImage, scanUrl });
     }
 
     saveScanCounts(); // Save the updated scan counts
-    res.json({ message: "QR codes generated successfully!", files: filePaths });
+    res.json({ message: "QR codes generated successfully!", images: qrImages });
   } catch (error) {
     console.error("Error generating QR codes:", error);
     res.status(500).json({ error: "Failed to generate QR codes." });
