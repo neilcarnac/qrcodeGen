@@ -48,7 +48,7 @@ const sanitizeFilename = (phoneNumber) => {
 /**
  * Generate QR Code API
  */
-const SERVER_URL = "https://qrcodegen-y23f.onrender.com";
+const SERVER_URL = "https://qrcodegen-1-3su1.onrender.com";
 
 app.post("/generate-qr", async (req, res) => {
   const { phoneNumbers } = req.body;
