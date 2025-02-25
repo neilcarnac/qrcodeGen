@@ -42,6 +42,8 @@ const sanitizeFilename = (phoneNumber) => {
 /**
  * Generate QR Code API
  */
+const SERVER_URL = "https://qr-code-eddm47kol-neilcarnacs-projects.vercel.app";
+
 app.post("/generate-qr", async (req, res) => {
   const { phoneNumbers } = req.body;
 
@@ -61,7 +63,7 @@ app.post("/generate-qr", async (req, res) => {
       }
 
       // Generate QR Code with a scan URL
-      const scanUrl = `http://localhost:${PORT}/scan-qr?code=${sanitizedNumber}`;
+      const scanUrl = `${SERVER_URL}/scan-qr?code=${sanitizedNumber}`;
       const qrPath = path.join(qrCodesDir, `${sanitizedNumber}.png`);
 
       await QRCode.toFile(qrPath, scanUrl);
@@ -87,7 +89,7 @@ app.get("/scan-qr", async (req, res) => {
 
   try {
     // Call API to check scan count
-    const response = await fetch(`http://localhost:${PORT}/check-scan`, {
+    const response = await fetch(`${SERVER_URL}/check-scan`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ code }),
@@ -125,6 +127,4 @@ app.post("/check-scan", (req, res) => {
   res.json({ message, scanCount: scanCounts[code] });
 });
 
-app.listen(PORT, () =>
-  console.log(`🚀 Server running on http://localhost:${PORT}`)
-);
+app.listen(PORT, () => console.log(`🚀 Server running on ${SERVER_URL}`));
