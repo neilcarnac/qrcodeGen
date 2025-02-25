@@ -12,7 +12,13 @@ app.use(express.json());
 const qrCodesDir = path.join(__dirname, "qrcodes");
 const scanCountsFile = path.join(__dirname, "scanCounts.json");
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "*",
+    methods: ["GET", "POST"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
 
 // OR configure specific origins
 
@@ -42,7 +48,7 @@ const sanitizeFilename = (phoneNumber) => {
 /**
  * Generate QR Code API
  */
-const SERVER_URL = "https://qr-code-eddm47kol-neilcarnacs-projects.vercel.app";
+const SERVER_URL = "https://qr-code-1todaor6f-neilcarnacs-projects.vercel.app";
 
 app.post("/generate-qr", async (req, res) => {
   const { phoneNumbers } = req.body;
