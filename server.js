@@ -5,11 +5,16 @@ const path = require("path");
 
 const app = express();
 const PORT = 3000;
+const cors = require("cors");
 
 app.use(express.json());
 
 const qrCodesDir = path.join(__dirname, "qrcodes");
 const scanCountsFile = path.join(__dirname, "scanCounts.json");
+
+app.use(cors());
+
+// OR configure specific origins
 
 // Ensure directories exist
 if (!fs.existsSync(qrCodesDir)) fs.mkdirSync(qrCodesDir);
